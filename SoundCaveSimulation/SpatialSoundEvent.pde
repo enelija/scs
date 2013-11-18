@@ -1,10 +1,10 @@
 class SpatialSoundEvent {
   
-  int number;        // start at 1, up to 10 
-  float volume;      // range [0.0-1.0]
-  float distance;    // range [0.0-10.0]
-  float angle;       // range [0.0-360.0]
-  boolean isOn;      // turn sound on or off
+  int number;          // start at 1, up to 10 
+  float volume;        // range [0.0-1.0]
+  float distance;      // range [0.0-10.0]
+  float angle;         // range [0.0-360.0]
+  boolean isOn;        // turn sound on or off
   
   SpatialSoundEvent(int number) {
     this.number = number;
@@ -50,7 +50,7 @@ class SpatialSoundEvent {
     return angle;
   }
   
-  boolean getIsOn() {
+  boolean isOn() {
     return isOn;
   }
 }
