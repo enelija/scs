@@ -23,7 +23,7 @@ final int BUMP = 2;
 final int TOUCH = 3;
 final int HIT = 4;
 final int NUMBER_INTERACTIONS = 5;
-float [] volumes = {0.7, 0.75, 1.0, 1.0, 1.0};
+float [] volumes = {0.5, 0.0, 1.0, 1.0, 1.0};
 SpatialSoundEvent soundEvents[] = new SpatialSoundEvent[NUMBER_INTERACTIONS];
 
 // absolute width and height for the canvas
@@ -41,9 +41,6 @@ color suColor = color(0, 255, 0);
 
 // stroke weight for user representation
 int sw = 2;
-
-// normalized threshold: below is calm, greater or equal means aggressive
-float movementThreshold = 0.5;
 
 // normalized sound source, cave and sound user starting positions
 float centerX = 0.5, centerY = 0.5;
@@ -65,6 +62,8 @@ boolean isTouch = false, isHit = false;
 String cuMovementDetails = "Cave user movement: NONE\n";
 String cuInteractionDetails = "Cave user interaction: NONE\n";
 
+// empirical velocity maximum for the program start, will adapt over time
+float maxVelocity = 3.0;
 
 /* ----------------- Setup and main loop ----------------- */
 void setup() {
@@ -119,19 +118,30 @@ void setupSounds() {
 
 // react on slow (calm) and fast (aggressive) cave user movement
 void reactOnCaveUserMovement() {
-  // for cave user movement calculate the distance of the cave user from the center (sound source)
-  float distance = dist(centerX, centerY, cuX, cuY);
-  float angle = 180.0 + atan2((centerY - cuY), (centerX - cuX)) * 180.0 / PI;
-  float cuVelocity = getCuVelocity();  
-  
-  // create a string which contains the details of the movement
-  String vel = String.format("%.2f", cuVelocity);
-  if (cuVelocity > epsilon && cuVelocity < movementThreshold) {
-    cuMovementDetails = "Cave user movement: CALM\n" + vel;
+  if (updateCaveUserPosition()) {
+    // for cave user movement calculate the distance of the cave user from the center (sound source)
+    float distance = dist(centerX, centerY, cuX, cuY);
+    float angle = 180.0 + atan2((centerY - cuY), (centerX - cuX)) * 180.0 / PI;
+    
+    float cuVelocity = getCuVelocity();
+    // adapt to maximum velocity   
+    if (cuVelocity > maxVelocity)
+      maxVelocity = cuVelocity;
+    // normlize veloctiy
+    float normVelocity = map(cuVelocity, 0, maxVelocity, 0.0, 1.0);
+    // mix aggressive and calm sounds depending on the velocity
+    soundEvents[CALM].setVolume(1.0 - normVelocity);
     sendSoundDataAndEvent(CALM, distance, angle);
-  } else if (cuVelocity >= movementThreshold){
-    cuMovementDetails = "Cave user movement: AGGRESSIVE\n" + vel;
+    soundEvents[AGGRESSIVE].setVolume(normVelocity);
     sendSoundDataAndEvent(AGGRESSIVE, distance, angle);
+    
+    // create a string which contains the details of the movement
+    String vel = String.format("%.2f", cuVelocity);
+    String nvel = String.format("%.2f", normVelocity);
+    if (normVelocity < 0.5)
+      cuMovementDetails = "Cave user movement: CALM\n" + vel + " / " + nvel;
+    else
+      cuMovementDetails = "Cave user movement: AGGRESSIVE\n" + vel + " / " + nvel;
   }
 }
 
@@ -195,14 +205,7 @@ float getCuVelocity() {
 }
 
 boolean updateCaveUserPosition() {
-  if (abs(oCuX - cuX) > epsilon && abs(oCuY - cuY) > epsilon) {
-    // calculate velocity, here in pixels/second
-    float distance = dist(oCuX, oCuY, cuX, cuY);
-    float td = float(millis() - oldTimeStamp);
-    float velocity = distance / td;
-    return true;
-  }
-  return false;
+  return (abs(oCuX - cuX) > epsilon && abs(oCuY - cuY) > epsilon);
 }
 
 boolean isOverlap() {

@@ -24,7 +24,8 @@ void controlEvent(ControlEvent theEvent) {
       // turn sound on
       if (n == 1 && !soundEvents[i].isOn()) {
         soundEvents[i].setIsOn(true);
-        sendSoundEvent(soundEvents[i], false);
+        if (i == CALM || i == AGGRESSIVE)
+          sendSoundEvent(soundEvents[i], false);
       // turn sound off
       } else if ((n == 0) && soundEvents[i].isOn()) {
         soundEvents[i].setIsOn(false);
