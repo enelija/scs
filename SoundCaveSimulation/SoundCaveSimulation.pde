@@ -33,7 +33,7 @@ SpatialSoundEvent soundEvents[] = new SpatialSoundEvent[NUMBER_INTERACTIONS];
 int w = 800, h = 800;
 
 // normalized user representation dimension
-float uDim = 0.05;
+float uDim = 0.075;
 float uDimHalf = uDim / 2.0;
 
 // background color, cave and sound user colors
@@ -231,7 +231,7 @@ float upscaleY(float y) {
 void drawUserPositions(color c, float x, float y) {
   stroke(c);
   noFill();
-  rect(upscaleX(x), upscaleY(y), uDim * width, uDim * height);
+  rect(upscaleX(x), upscaleY(y), upscaleX(uDim - 1.0), upscaleY(uDim - 1.0));
   line(upscaleX(x), upscaleY(y), upscaleX(x + uDim * 0.75), upscaleY(y));
 }
 
@@ -298,9 +298,9 @@ void mousePressed() {
  
   // do not let the user move a rectangle into the button area
   if (mouseY < h) {
-    if (isInside(suX, suY, normalizeW(mouseX), normalizeW(mouseY))) {
+    if (isInside(normalizeW(mouseX), normalizeW(mouseY), suX, suY)) {
       isSuDraggingActive = true;
-    } else if (isInside(cuX, cuY, normalizeW(mouseX), normalizeH(mouseY))) {
+    } else if (isInside(normalizeW(mouseX), normalizeH(mouseY), cuX, cuY)) {
       isCuDraggingActive = true;
     }
   }
