@@ -10,11 +10,11 @@ void setupGUI() {
              .setColorActive(color(255))
              .setColorLabel(color(255))
              .setSize(20, 20)
-             .addItem("/0 CALM", soundEvents[CALM].getNumber())
-             .addItem("/1 AGGRESSIVE", soundEvents[AGGRESSIVE].getNumber())
-             .addItem("/2 BUMP", soundEvents[BUMP].getNumber())
-             .addItem("/3 TOUCH", soundEvents[TOUCH].getNumber())
-             .addItem("/4 HIT", soundEvents[HIT].getNumber());
+             .addItem("/0 POSITION", soundEvents[POSITION].getNumber())
+             .addItem("/1 VELOCITY", soundEvents[VELOCITY].getNumber())
+             .addItem("/2 BUMP",     soundEvents[BUMP].getNumber())
+             .addItem("/3 TOUCH",    soundEvents[TOUCH].getNumber())
+             .addItem("/4 HIT",      soundEvents[HIT].getNumber());
 }
 
 void controlEvent(ControlEvent theEvent) {
@@ -24,7 +24,7 @@ void controlEvent(ControlEvent theEvent) {
       // turn sound on
       if (n == 1 && !soundEvents[i].isOn()) {
         soundEvents[i].setIsOn(true);
-        if (i == CALM || i == AGGRESSIVE)
+        if (i == POSITION)
           sendSoundEvent(soundEvents[i], false);
       // turn sound off
       } else if ((n == 0) && soundEvents[i].isOn()) {
