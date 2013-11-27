@@ -59,8 +59,7 @@ int oldTimeStamp = 0;
 int lastHeartbeat = 0;
 
 int lastInteraction = 0;
-// TODO 1: not sure which distance / angle should be used
-//float interactDistance = 0.0, interactAngle = 0.0;
+float interactDistance = 0.0, interactAngle = 0.0;
 
 // interaction variables
 boolean isCuDraggingActive = false, isSuDraggingActive = false;
@@ -107,15 +106,16 @@ void update() {
   oCuY = cuY;
   oldTimeStamp = millis();
   isHit = false;
-  //isTouch = false;
 }
 
 /* ----------------------- Functions ----------------------- */
 void setupSounds() {
   soundEvents[POSITION] = new SpatialSoundEvent(0);
+  soundEvents[POSITION].setIsLooped(true);
   soundEvents[VELOCITY] = new SpatialSoundEvent(1);
   soundEvents[BUMP]     = new SpatialSoundEvent(2);
   soundEvents[TOUCH]    = new SpatialSoundEvent(3);
+  soundEvents[TOUCH].setIsLooped(true);
   soundEvents[HIT]      = new SpatialSoundEvent(4);
  
   // set volumes for all sounds
@@ -150,11 +150,6 @@ void reactOnCaveUserInteractions() {
   // react on BUMP
   if (isNewOverlap && isOverlap()) {
     lastInteraction = BUMP;
-    // for bump interaction calculate the distance of the cave from the center (sound source)
-    // TODO 1: not sure which distance / angle should be used
-    //interactDistance = cuDistFromCenter;
-    //interactAngle = cuAngle;  
-    //sendSoundDataAndEvent(BUMP, interactDistance, interactAngle);
     sendSoundDataAndEvent(BUMP, cuDistFromCenter, cuAngle);
     isNewOverlap = false;
   } else if (!isOverlap())
@@ -162,28 +157,24 @@ void reactOnCaveUserInteractions() {
  
   // react on HIT
   if (isHit) {
-    // for hit and touch interactions calculate the distance of the hit/touch position
-    // in relation to the sound user
+    // for hit calculate the distance of the hit position
     lastInteraction = HIT;
-    // TODO 1: not sure which distance / angle should be used
-    //interactDistance = dist(normalizeW(mouseX), normalizeH(mouseY), suX, suY);
-    //interactAngle = 180.0 + atan2((centerY - suY), (centerX - suX)) * 180.0 / PI;
-    //sendSoundDataAndEvent(HIT, interactDistance, interactAngle);
-    sendSoundDataAndEvent(HIT, cuDistFromCenter, cuAngle);
+    interactDistance = dist(normalizeW(mouseX), normalizeH(mouseY), suX, suY);
+    interactAngle = 180.0 + atan2((centerY - suY), (centerX - suX)) * 180.0 / PI;
+    sendSoundDataAndEvent(HIT, interactDistance, interactAngle);
     
   // react on TOUCH
   } else if (isTouch) {
     lastInteraction = TOUCH;
-    // TODO 1: not sure which distance / angle should be used
-    //interactDistance = dist(normalizeW(mouseX), normalizeH(mouseY), suX, suY);
-    //interactAngle = 180.0 + atan2((centerY - suY), (centerX - suX)) * 180.0 / PI;
-    //sendSoundDataAndEvent(TOUCH, interactDistance, interactAngle);
-    if (!soundEvents[TOUCH].isOn())
+    // for touch calculate the distance of the touch position
+    interactDistance = dist(normalizeW(mouseX), normalizeH(mouseY), suX, suY);
+    interactAngle = 180.0 + atan2((centerY - suY), (centerX - suX)) * 180.0 / PI;
+    if (!soundEvents[TOUCH].isOn()) 
       soundEvents[TOUCH].setIsOn(true);
-    sendSoundDataAndEvent(TOUCH, cuDistFromCenter, cuAngle);
+    sendSoundDataAndEvent(TOUCH, interactDistance, interactAngle);
   } else if (!isTouch && soundEvents[TOUCH].isOn()) {
     soundEvents[TOUCH].setIsOn(false);
-    sendSoundDataAndEvent(TOUCH, cuDistFromCenter, cuAngle);
+    sendSoundEventOff(soundEvents[TOUCH]);
   }
 }
 
@@ -193,7 +184,7 @@ void sendSoundDataAndEvent(int interaction, float distance, float angle) {
     soundEvents[interaction].setDistance(distance);
     soundEvents[interaction].setAngle(angle);
     // send sound event, but only when the sound is turned on
-    sendSoundEvent(soundEvents[interaction], true);
+    sendSoundEvent(soundEvents[interaction]);
 }
 
 boolean updateCaveUserPosition() {
@@ -261,17 +252,19 @@ void drawDetails() {
   a = String.format("%.2f", normVelocity);
   text("Cave user velocity / heartbeat: \n  " + a + " / " + heartbeat * 60, width - 220, 70);
   
-  // TODO 1: not sure which distance / angle should be used
-  //a = String.format("%.2f", interactDistance);
-  //b = String.format("%.2f", interactAngle);
+  String ia = String.format("%.2f", interactDistance);
+  String ib = String.format("%.2f", interactAngle);
   String i = "NONE";
-  if (lastInteraction == BUMP)
+  if (lastInteraction == BUMP) {
     i = "BUMP";
-  else if (lastInteraction == HIT)
-    i = "HIT";
-  else if (lastInteraction == TOUCH)
-    i = "TOUCH";
-  text("Cave user interaction: " + i + "\n  " + a + " / " + b, width - 220, 115);
+    text("Cave user interaction: " + i + "\n  " + a + " / " + b, width - 220, 115);
+  } else {
+    if (lastInteraction == HIT)
+      i = "HIT";
+    else if (lastInteraction == TOUCH)
+      i = "TOUCH";
+    text("Cave user interaction: " + i + "\n  " + a + " / " + b, width - 220, 115);
+  }  
   
   a = String.format("%.2f", cuX);
   b = String.format("%.2f", cuY);

@@ -24,12 +24,12 @@ void controlEvent(ControlEvent theEvent) {
       // turn sound on
       if (n == 1 && !soundEvents[i].isOn()) {
         soundEvents[i].setIsOn(true);
-        if (i == POSITION)
-          sendSoundEvent(soundEvents[i], false);
+        if (i == POSITION && soundEvents[i].isLooped())
+          sendSoundEvent(soundEvents[i]);
       // turn sound off
       } else if ((n == 0) && soundEvents[i].isOn()) {
         soundEvents[i].setIsOn(false);
-        sendSoundEvent(soundEvents[i], false);
+        sendSoundEventOff(soundEvents[i]);
       }
     }
   }

@@ -14,7 +14,36 @@ void setupCommunication() {
   }
 }
 
+void sendSoundEvent(SpatialSoundEvent se) {
+  if (se.isOn()) {
+    OscMessage message = new OscMessage(msgPattern + "/" + se.getNumber());
+    message.add(se.getVolume());
+    message.add(se.getDistance());
+    message.add(se.getAngle());
+    if (DEBUG) {
+      print("Sending OSC message with pattern " + message.addrPattern());
+      print(" and typetag " + message.typetag() + ": ");
+      print(se.getVolume());
+      println(" " + se.getDistance() +  " " + se.getAngle());
+    }
+    oscP5.send(message, pdServer);
+  }
+}
 
+void sendSoundEventOff(SpatialSoundEvent se) {
+    OscMessage message = new OscMessage(msgPattern + "/" + se.getNumber());
+    message.add(0.0);
+    message.add(0.0);
+    message.add(0.0);
+    if (DEBUG) {
+      print("Sending OSC message with pattern " + message.addrPattern());
+      print(" and typetag " + message.typetag() + ": 0.0 0.0 0.0");
+    }
+    oscP5.send(message, pdServer);
+}
+
+
+/*
 void sendSoundEvent(SpatialSoundEvent se, boolean sendOnlyOn) {
   if (se.isOn() || !sendOnlyOn) {
     OscMessage message = new OscMessage(msgPattern + "/" + se.getNumber());
@@ -48,4 +77,4 @@ void sendSoundEvent(SpatialSoundEvent se, boolean sendOnlyOn) {
     oscP5.send(message, pdServer);
   }
 }
-
+*/
