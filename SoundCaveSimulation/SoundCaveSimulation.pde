@@ -107,7 +107,7 @@ void update() {
   oCuY = cuY;
   oldTimeStamp = millis();
   isHit = false;
-  isTouch = false;
+  //isTouch = false;
 }
 
 /* ----------------------- Functions ----------------------- */
@@ -178,6 +178,11 @@ void reactOnCaveUserInteractions() {
     //interactDistance = dist(normalizeW(mouseX), normalizeH(mouseY), suX, suY);
     //interactAngle = 180.0 + atan2((centerY - suY), (centerX - suX)) * 180.0 / PI;
     //sendSoundDataAndEvent(TOUCH, interactDistance, interactAngle);
+    if (!soundEvents[TOUCH].isOn())
+      soundEvents[TOUCH].setIsOn(true);
+    sendSoundDataAndEvent(TOUCH, cuDistFromCenter, cuAngle);
+  } else if (!isTouch && soundEvents[TOUCH].isOn()) {
+    soundEvents[TOUCH].setIsOn(false);
     sendSoundDataAndEvent(TOUCH, cuDistFromCenter, cuAngle);
   }
 }
@@ -311,5 +316,6 @@ void mouseReleased() {
     isCuDraggingActive = false;
   else if (isSuDraggingActive)
     isSuDraggingActive = false;
+  isTouch = false;
 }
 

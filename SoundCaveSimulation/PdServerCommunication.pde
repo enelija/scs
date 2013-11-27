@@ -14,6 +14,7 @@ void setupCommunication() {
   }
 }
 
+
 void sendSoundEvent(SpatialSoundEvent se, boolean sendOnlyOn) {
   if (se.isOn() || !sendOnlyOn) {
     OscMessage message = new OscMessage(msgPattern + "/" + se.getNumber());
@@ -33,6 +34,18 @@ void sendSoundEvent(SpatialSoundEvent se, boolean sendOnlyOn) {
       println(" " + se.getDistance() +  " " + se.getAngle());
     }
     oscP5.send(message, pdServer);
+  } else if (!se.isOn()) {
+    OscMessage message = new OscMessage(msgPattern + "/" + se.getNumber());
+    message.add(0.0);
+    message.add(se.getDistance());
+    message.add(se.getAngle());
+    if (DEBUG) {
+      print("Sending OSC message with pattern " + message.addrPattern());
+      print(" and typetag " + message.typetag() + ": ");
+      print("0.0");
+      println(" " + se.getDistance() +  " " + se.getAngle());
+    }
+    oscP5.send(message, pdServer);
   }
 }
-  
+
