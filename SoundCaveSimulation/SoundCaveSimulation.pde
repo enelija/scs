@@ -51,7 +51,7 @@ float oCuX = centerX, oCuY = centerY;
 float epsilon = 0.0000000001;
 float cuDistFromCenter = 0.0, cuAngle = 0.0, normVelocity, hearbeat;
 float maxVelocity = 2.0;
-int minHeartbeat = 1, maxHeartbeat = 3;    // beats per second (* 60 = beats per minute 60/180)
+int minHeartbeat = 60, maxHeartbeat = 180;    // beats per minute
 int heartbeat = 0;
 
 // variable for calculating the velocity
@@ -139,7 +139,7 @@ void reactOnCaveUserMovement() {
   heartbeat = int(map(velocity, 0.0, maxVelocity, minHeartbeat, maxHeartbeat));
   
   // if enough time passed, send a new heartbeat sound event
-  if (float(now - lastHeartbeat) > 1.0 / float(heartbeat) * 1000.0) {
+  if (float(now - lastHeartbeat) > 1.0 / float(heartbeat) * 60000) {
     sendSoundDataAndEvent(VELOCITY, cuDistFromCenter, cuAngle);
     lastHeartbeat = now;
   } 
