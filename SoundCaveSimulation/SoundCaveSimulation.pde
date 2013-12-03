@@ -238,7 +238,7 @@ void drawInstructions() {
   fill(suColor);
   text("SOUND user", 10, h - 30);
   fill(255);
-  text("LMB: drag users / RMB: touch sound user", 10, h - 10);
+  text("LMB: drag users / MMB: hit sound user / RMB: touch sound user", 10, h - 10);
   noFill();
 }
 
@@ -250,7 +250,7 @@ void drawDetails() {
   text("Cave user distance / angle: \n  " + a + " / " + b, width - 220, 25);
   
   a = String.format("%.2f", normVelocity);
-  text("Cave user velocity / heartbeat: \n  " + a + " / " + heartbeat * 60, width - 220, 70);
+  text("Cave user velocity / heartbeat: \n  " + a + " / " + heartbeat, width - 220, 70);
   
   String ia = String.format("%.2f", interactDistance);
   String ib = String.format("%.2f", interactAngle);
