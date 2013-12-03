@@ -1,0 +1,16 @@
+#N canvas 409 505 450 300 10;
+#X obj 92 88 netsend;
+#X msg 217 52 connect localhost 34567;
+#X obj 92 107 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
+;
+#X text 113 106 <-- connection status;
+#X msg 217 71 disconnect;
+#X obj 16 36 tgl 30 0 empty empty empty 17 7 0 10 -260097 -1 -1 0 1
+;
+#X msg 16 71 send \$1;
+#X msg 217 33 connect 10.17.1.10 34567;
+#X connect 0 0 2 0;
+#X connect 1 0 0 0;
+#X connect 4 0 0 0;
+#X connect 5 0 6 0;
+#X connect 6 0 0 0;

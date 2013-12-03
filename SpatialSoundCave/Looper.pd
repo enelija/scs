@@ -1,0 +1,31 @@
+#N canvas 686 355 912 281 10;
+#X declare -lib bsaylor;
+#X obj 95 112 soundfiler;
+#X obj 95 78 symbol \$1;
+#X obj 49 15 loadbang;
+#N canvas 0 0 450 300 (subpatch) 0;
+#X array \$1-sample 100 float 3;
+#A 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0;
+#X coords 0 1 99 -1 200 140 1;
+#X restore 397 30 graph;
+#X msg 95 95 read -resize \$1 \$1-sample;
+#X obj 49 157 tabread4~ \$1-sample;
+#X obj 49 179 outlet~;
+#X obj 49 136 susloop~ 0 0;
+#X msg 49 112 44100;
+#X msg 358 119 0;
+#X obj 653 34 import bsaylor;
+#X connect 0 0 7 2;
+#X connect 1 0 4 0;
+#X connect 2 0 1 0;
+#X connect 2 0 8 0;
+#X connect 2 0 9 0;
+#X connect 4 0 0 0;
+#X connect 5 0 6 0;
+#X connect 7 0 5 0;
+#X connect 8 0 7 0;
+#X connect 9 0 7 1;
+#X connect 9 0 7 3;
