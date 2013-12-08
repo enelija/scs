@@ -26,7 +26,7 @@ final int BUMP = 2;
 final int TOUCH = 3;
 final int HIT = 4;
 final int NUMBER_INTERACTIONS = 5;
-float [] volumes = {1.0, 1.0, 1.0, 1.0, 1.0};
+float [] volumes = {1.0, 1.0, 0.4, 1.0, 0.4};
 SpatialSoundEvent soundEvents[] = new SpatialSoundEvent[NUMBER_INTERACTIONS];
 
 // absolute width and height for the canvas
@@ -51,7 +51,7 @@ float oCuX = centerX, oCuY = centerY;
 float epsilon = 0.0000000001;
 float cuDistFromCenter = 0.0, cuAngle = 0.0, normVelocity, hearbeat;
 float maxVelocity = 2.0;
-int minHeartbeat = 60, maxHeartbeat = 180;    // beats per minute
+int minHeartbeat = 50, maxHeartbeat = 125;    // beats per minute
 int heartbeat = 0;
 
 // variable for calculating the velocity
