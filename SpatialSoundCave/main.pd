@@ -1,4 +1,4 @@
-#N canvas 795 211 690 648 10;
+#N canvas 2 444 690 648 10;
 #X declare -lib mrpeach;
 #X declare -lib bsaylor;
 #X declare -lib bsaylor;
@@ -7,7 +7,7 @@
 #X declare -lib bsaylor;
 #X obj -42 485 compressor~;
 #X msg 390 454 \; pd dsp \$1;
-#X obj 390 420 tgl 30 0 empty empty empty 17 7 0 10 -260097 -1 -1 1
+#X obj 390 420 tgl 30 0 empty empty empty 17 7 0 10 -260097 -1 -1 0
 1;
 #X text 423 426 enable DSP;
 #X obj -42 547 dac~ 1 2 3 4 5 6 7 8;
@@ -29,7 +29,7 @@
 #X obj 242 119 print OutOfBounds;
 #X text 13 -13 Spatial Sound Cave main patch by Ulrich Brandstätter
 2013;
-#X obj 390 388 import mrpeach;
+#X obj 389 356 import mrpeach;
 #X obj 11 21 udpreceive 12345;
 #X obj 122 72 print UnknownOSCDomain;
 #X obj 11 55 routeOSC /SonicCave;
@@ -68,6 +68,8 @@
 #X obj 78 198 LinePanLooper~ touch.wav;
 #X text 222 40 comment;
 #X obj 56 240 LinePanPlayer~ bump.wav;
+#X obj 423 55 print;
+#X obj 390 389 loadbang;
 #X connect 0 0 4 0;
 #X connect 2 0 1 0;
 #X connect 5 0 0 0;
@@ -89,6 +91,7 @@
 #X connect 25 0 35 0;
 #X connect 25 1 24 0;
 #X connect 26 0 25 0;
+#X connect 26 0 55 0;
 #X connect 27 0 54 0;
 #X connect 27 1 54 1;
 #X connect 28 0 41 0;
@@ -109,3 +112,4 @@
 #X connect 46 0 47 0;
 #X connect 48 0 49 0;
 #X connect 50 0 51 0;
+#X connect 56 0 2 0;
