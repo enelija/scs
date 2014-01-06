@@ -1,17 +1,15 @@
 Requirements:
 =========================================================================================
 - 4-channel audio system
-
 - pd-extended
-
 - Windows only because of the used Ambisonic driver
 
 
 Installation:
 =========================================================================================
-- Download and install pd-extended
+- Download and install pd-extended (for the sound system)
 
-- Download and install Processing
+- Download and install Processing (for the simulator - optional)
  -- Go to 'Sketch' menu -> 'Import Library' -> 'Add library' and install the oscP5 and 
     the controlP5 library
 
@@ -42,6 +40,8 @@ Configuration:
 
 Documentation:
 =========================================================================================
+SOUND SYSTEM:
+=============
 The pd patch receives OSC UDP network messages with the URL /SonicCave/<n> with the 
 number <n> which determines the sound file number (see object "routeOSC"):
  /0 - CAVE USER POSITION
@@ -51,6 +51,8 @@ number <n> which determines the sound file number (see object "routeOSC"):
  /4 - HIT INTERACTION
 LinePanLooper is used for looped sounds, LinePanPlayer is used for sounds played once. 
 
+SIMULATOR:
+=============
 The processing sketch is used as simulation tool for the CAVE and ROOM user's movements 
 and the CAVE user's interactions. Depending on the action/movement/speed of movement the
 according events are sent as OSC messages to the sound system (pd patch).  
@@ -59,11 +61,11 @@ The pd patch does not depend on the Processing sketch, it can receive OSC messag
 any system.
 
 - Run the main.pd patch
- -- press "enable DSP"
- -- the yellow sliders visualize the response for all four loudspeakers
+ -- toggle sound on/off by clicking the button "enable DSP"
+ -- the yellow sliders visualize the response for each loudspeaker separately 
 
 - Run the Processing sketch
- -- turn on all sounds which should be heared (upper left corner)
+ -- turn on all sounds which should be heard (upper left corner)
  -- grab and move the CAVE user (red) and ROOM user (green) and experience the spatial 
     sound (related to the CAVE user)
  -- bump is triggered when the positions overlap
